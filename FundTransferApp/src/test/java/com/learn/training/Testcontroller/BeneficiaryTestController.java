@@ -51,4 +51,15 @@ public class BeneficiaryTestController {
 		controller.createBeneficiary(beneficiary);
 		verify(beneficiaryservice).CreateBeneficiary(beneficiary);
 	}
+	
+	@Test
+	@Order(2)
+	@DisplayName("get all beneficiarys   :: Postive Scenario")
+	public void getallbeneficiaryDetailsTest() {
+		controller.getAllAccountDetails();
+		verify(beneficiaryservice).GetAllBeneficiarys();
+	}
+
 }
+
+
