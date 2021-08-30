@@ -23,7 +23,7 @@ import org.hibernate.annotations.ManyToAny;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class BankAccountInfo {
+public class BankAccount {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,7 +51,7 @@ public class BankAccountInfo {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<TransferBalanceRequest> transferbalancerequest;
 
-	public BankAccountInfo(Long accountId, @NotNull(message = "Account Number isMandatory") Integer accountNumber,
+	public BankAccount(Long accountId, @NotNull(message = "Account Number isMandatory") Integer accountNumber,
 			@NotEmpty(message = "IFSC is Mandatory") String ifsccode,
 			@NotEmpty(message = "Please provide Branch Name") String branchName,
 			@NotNull(message = "Please Enter Balance") BigDecimal availableBalance,
@@ -66,7 +66,7 @@ public class BankAccountInfo {
 		this.transferbalancerequest = transferbalancerequest;
 	}
 
-	public BankAccountInfo() {
+	public BankAccount() {
 		super();
 	}
 
