@@ -4,10 +4,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jmx.export.UnableToRegisterMBeanException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.learn.training.FundTransfer.DTO.CustomerDTO;
 import com.learn.training.FundTransfer.Exceptions.AdharNotFoundException;
 import com.learn.training.FundTransfer.Exceptions.IdNotFoundException;
 import com.learn.training.FundTransfer.Exceptions.UnableToCreateCustomer;
@@ -25,6 +27,8 @@ import com.learn.training.FundTransfer.Service.CustomerInformationService;
 
 @RestController
 public class CustomRegistrationController {
+
+	private static final Logger logger = LoggerFactory.getLogger(CustomRegistrationController.class);
 	@Autowired
 	CustomerInformationService service;
 
@@ -33,24 +37,24 @@ public class CustomRegistrationController {
 		Customer customerinfo = service.getByuserId(userId);
 		if (customerinfo == null)
 			throw new IdNotFoundException("Customer Id Not Found with " + userId);
+		logger.info("inside the GetByUserId method");
 		return ResponseEntity.status(HttpStatus.OK).body(customerinfo);
 
 	}
 
 	@RequestMapping(value = "/getcustomerByUidai/{adharNumber}", method = RequestMethod.GET)
-	public ResponseEntity<Customer> GetByAdharNumber(@PathVariable Long adharNumber)
-			throws AdharNotFoundException {
+	public ResponseEntity<Customer> GetByAdharNumber(@PathVariable Long adharNumber) throws AdharNotFoundException {
 
 		Customer customerinfo = service.getByAdharNumber(adharNumber);
 		if (customerinfo == null)
 			throw new AdharNotFoundException("Adhar number not found with the " + adharNumber);
+		logger.info("inside the GetByAdharNumber method");
 		return ResponseEntity.status(HttpStatus.OK).body(customerinfo);
 
 	}
 
 	@RequestMapping(value = "/createcustomer", method = RequestMethod.POST)
-	public ResponseEntity<Customer> CreateCustomerInfo(
-			@Valid @RequestBody Customer customerregistartioninfo) {
+	public ResponseEntity<Customer> CreateCustomerInfo(@Valid @RequestBody Customer customerregistartioninfo) {
 		Response response = null;
 		Customer customerinfo = service.CreateCustomerInfo(customerregistartioninfo);
 		if (customerinfo != null) {
@@ -61,6 +65,7 @@ public class CustomRegistrationController {
 		} else {
 			throw new UnableToCreateCustomer("Unable to create customer please check the details");
 		}
+		logger.info("inside the CreateCustomer method");
 		return ResponseEntity.status(HttpStatus.CREATED).body(customerinfo);
 
 	}
@@ -68,13 +73,14 @@ public class CustomRegistrationController {
 	@RequestMapping(value = "/getallcustomersInfo", method = RequestMethod.GET)
 	public ResponseEntity<List<Customer>> GetAllCutomers() {
 		List<Customer> customerinfo = service.GetAllCustomers();
+		logger.info("inside the GetAllCustomers method");
 		return ResponseEntity.status(HttpStatus.OK).body(customerinfo);
 
 	}
 
 	@PutMapping("/updatecustomeruserinfo/{userId}")
-	public ResponseEntity<String> UpdateCustomerInfo(@PathVariable Integer userId,
-			@RequestBody Customer user) throws IdNotFoundException {
+	public ResponseEntity<String> UpdateCustomerInfo(@PathVariable Integer userId, @RequestBody Customer user)
+			throws IdNotFoundException {
 
 		Customer customerinfo = service.getByuserId(userId);
 		if (customerinfo.getUserId() == null)
@@ -95,4 +101,12 @@ public class CustomRegistrationController {
 		service.DeleteCustomerInfo(userId);
 		return HttpStatus.OK;
 	}
+
+	
+
+	public ResponseEntity<?> CreateCustomerInfo(CustomerDTO customerdto) {
+		// TODO Auto-generated method stub
+		CustomerDTO dto=  service.CreateCustomerInfo(customerdto);
+		return ResponseEntity.status(HttpStatus.OK).body(dto);
+				}
 }
