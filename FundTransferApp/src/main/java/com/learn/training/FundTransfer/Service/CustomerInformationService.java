@@ -1,13 +1,12 @@
 package com.learn.training.FundTransfer.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.learn.training.FundTransfer.DTO.CustomerDTO;
 import com.learn.training.FundTransfer.Model.Customer;
-import com.learn.training.FundTransfer.Model.Response;
 import com.learn.training.FundTransfer.Repository.CustomerInformationRepository;
 
 @Service
@@ -46,5 +45,13 @@ public class CustomerInformationService {
 	public void DeleteCustomerInfo(Integer userId) {
 		repo.deleteById(userId);
 	}
+
+	public CustomerDTO CreateCustomerInfo(CustomerDTO customerdto) {
+		// TODO Auto-generated method stub
+		return repo.save(customerdto);
+	}
+
+	
+	
 
 }
